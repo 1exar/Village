@@ -5,5 +5,7 @@ using UnityEngine;
 
 public class Perforating : MonoBehaviour
 {
-    
+
+    public float yOffset;
+
 }

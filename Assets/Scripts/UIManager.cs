@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,27 +9,15 @@ public class UIManager : MonoBehaviour
 {
 
     public List<GameObject> panels;
+    public GameObject lumberJobPane, collectChoiseItemsPanel;
 
-    public Slider avaibleBalls;
-    public Slider count;
+    public static UIManager I;
 
-    public Text avaibleSlider, countSlider;
-    
-    public GameObject countAndBallPanel;
-
-    private enum JobVariant
+    private void Awake()
     {
-        LumberJob
+        I = this;
     }
 
-    private JobVariant _currentJobVariant;
-
-    public void RefreshSliders()
-    {
-        avaibleSlider.text = avaibleBalls.value + "";
-        countSlider.text = count.value + "";
-    }
-    
     public void CloseAllPanels()
     {
         foreach (var panel in panels)
@@ -39,23 +28,12 @@ public class UIManager : MonoBehaviour
 
     public void OnLumberJobChoise()
     {
-        countAndBallPanel.SetActive(true);
-        count.maxValue = WorldResourceManager.I.AvaibleWood();
-        avaibleBalls.maxValue = GameManeger.I.balls.Count(b => !b.haveTask);
-        _currentJobVariant = JobVariant.LumberJob;
-        RefreshSliders();
+        lumberJobPane.SetActive(true);
     }
 
-    public void MakeJob()
+    public void OnCollectJobChoise()
     {
-        switch (_currentJobVariant)
-        {
-            case JobVariant.LumberJob:
-                JobsManager.I.LumberTrees((int)count.value,(int)avaibleBalls.value);
-                break;
-        }
-        CloseAllPanels();
-        countAndBallPanel.SetActive(false);
+        collectChoiseItemsPanel.SetActive(true);
     }
-    
+
 }

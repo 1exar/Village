@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Jobs;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class BallAi : MonoBehaviour
 {
@@ -15,8 +17,10 @@ public class BallAi : MonoBehaviour
     [SerializeField] private bool followMouse;
 
     public bool haveTask = false;
-
+    [SerializeField]
     private Task currentJob;
+    
+    
     
     private void Awake()
     {
@@ -35,7 +39,7 @@ public class BallAi : MonoBehaviour
         {
             if (cast.transform.GetComponent<Perforating>())
             {
-                if (cast.transform.position.y - 0.3f < transform.position.y)
+                if (cast.transform.position.y - cast.transform.GetComponent<Perforating>().yOffset < transform.position.y)
                 {
                     _spriteRenderer.sortingOrder = _startOrder;
                 }
@@ -47,47 +51,66 @@ public class BallAi : MonoBehaviour
         }
     }
 
-    public void MakeJob(Task job)
+    public void LumberTrees(MineTrees job)
     {
-
-        currentJob = job;
-        
-        if (job.GetType() == typeof(MineTrees))
-        {
-            followMouse = false;
-            haveTask = true;
-            StartCoroutine(ProccesLumberJob());
-        }
-
-        if (job.GetType() == typeof(CollectAllDrops))
-        {
-            
-        }
-        
+        lumberJob = job;
+        followMouse = false;
+        haveTask = true;
+        StartCoroutine(ProccesLumberJob(job));
     }
 
     private GameObject _myTree;
-    private IEnumerator ProccesLumberJob()
+    [SerializeField] private MineTrees lumberJob;
+    private IEnumerator ProccesLumberJob(MineTrees job)
     {
         if (!_myTree)
         {
-            _myTree = GameObject.FindGameObjectWithTag("Tree");
+            List<Tree> avaibleTrees = job.trees.Where(t => !t.ocuped).ToList();
+            if (avaibleTrees.Count() > 0)
+            {
+                int treeId = Random.Range(0, avaibleTrees.Count);
+                _myTree = avaibleTrees[treeId].gameObject;
+                avaibleTrees[treeId].ocuped = true;
+            }
+            else if (avaibleTrees.Count() == 1)
+            {
+                _myTree = avaibleTrees[0].gameObject;
+                avaibleTrees[0].ocuped = true;
+            }
+            else
+            {
+                Debug.Log("NoTree");
+                EndJob();
+                followMouse = true;
+                yield return false;
+            }
         }
 
-        if (Vector2.Distance(transform.position, _myTree.transform.position) > 1)
+        if (_myTree)
         {
-            Debug.Log("go to tree");
-            _agent.destination = _myTree.transform.position;
-            yield return new WaitForSeconds(1);
+            if (Vector2.Distance(transform.position, _myTree.transform.position) > 1)
+            {
+                Debug.Log("go to tree");
+                _agent.destination = _myTree.transform.position;
+                yield return new WaitForSeconds(1);
+            }
+            else
+            {
+                Debug.Log("choop tree");
+                yield return new WaitForSeconds(1);
+                if(_myTree)
+                    _myTree.GetComponent<Tree>().TakeHurt(10);
+            }
         }
-        else
-        {
-            Debug.Log("choop tree");
-            yield return new WaitForSeconds(1);
-            _myTree.GetComponent<Tree>().TakeHurt(2);
-        }
-
+        
         yield return new WaitForSeconds(1);
-        StartCoroutine(ProccesLumberJob());
+        StartCoroutine(ProccesLumberJob(job));
+    }
+
+    public void EndJob()
+    {
+        lumberJob = null;
+        currentJob = null;
+        haveTask = false;
     }
 }

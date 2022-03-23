@@ -4,8 +4,9 @@ using Items;
 public interface IMined
 {
 
-    void OnMouseDown();
-    void Mine();
+    void OnMouseOver();
+    void OnMouseExit();
+    void Choop();
     void DropItems();
     void TakeHurt(int dmg);
 

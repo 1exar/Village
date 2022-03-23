@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Items;
 using Jobs;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ public class JobsManager : MonoBehaviour
     public static JobsManager I;
 
     [SerializeField]
-    public List<Task> tasks = new List<Task>();
+    public List<MineTrees> mineTreeTasks = new List<MineTrees>();
 
     private void Awake()
     {
@@ -21,22 +22,34 @@ public class JobsManager : MonoBehaviour
     {
         MineTrees job = new MineTrees();
         job.progressMax = count;
-        List<BallAi> avaibleBalls = GameManeger.I.balls.Where(b => !b.haveTask).ToList();
+        List<BallAi> avaibleBalls = GameManager.I.balls.Where(b => !b.haveTask).ToList();
         List<BallAi> usedBalls = new List<BallAi>();
+
+        GameObject[] trees = GameObject.FindGameObjectsWithTag("Tree").Where(t => !t.GetComponent<Tree>().ocuped).ToArray();
+        int c = 0;
+        for (int i = 0; c < count; i++)
+        {
+            Tree t = trees[i].GetComponent<Tree>();
+            t.jobWithMe = job;
+            c += t.woodDrop;
+            job.trees.Add(t);
+        }
+
         for (int i = 0; i < balls; i++)
         {
-            avaibleBalls[i].MakeJob(job);
+            avaibleBalls[i].LumberTrees(job);
             usedBalls.Add(avaibleBalls[i]);
         }
 
         job.balls = usedBalls;
-        tasks.Add(job);
+        mineTreeTasks.Add(job);
     }
-    
-    private void CheckTasks()
+
+    public void CollectItems(int count, int balls, Item[] type = null)
     {
         
     }
+
 }
 
 namespace Jobs
@@ -44,12 +57,30 @@ namespace Jobs
     [Serializable]
     public class MineTrees : Task
     {
-        
+        public List<Tree> trees = new List<Tree>();
+
+        public void ChopOneTree(int woodDrop)
+        {
+            progressCurrent += woodDrop;
+            if (progressCurrent >= progressMax)
+            {
+                if (balls.Count() != 0)
+                {
+                    foreach (var ball in balls.ToList())
+                    {
+                        ball.EndJob();
+                        balls.Remove(ball);
+                    }
+                }
+            }
+        }
     }
     [Serializable]
-    public class CollectAllDrops : Task
+    public class CollectDrops : Task
     {
-        
+
+        public List<DropedItem> itemsToCollect = new List<DropedItem>();
+
     }
     [Serializable]
     public class Task
