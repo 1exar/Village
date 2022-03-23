@@ -279,6 +279,8 @@ GameObject:
   - component: {fileID: 109331872}
   - component: {fileID: 109331871}
   - component: {fileID: 109331870}
+  - component: {fileID: 109331869}
+  - component: {fileID: 109331873}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -300,6 +302,24 @@ Transform:
   m_Father: {fileID: 211877583}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &109331869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109331867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 291196c9e7524430824f1468051c5344, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lumberJob:
+    name: 
+    progressMax: 0
+    progressCurrent: 0
+    balls: []
+    trees: []
 --- !u!195 &109331870
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -341,18 +361,6 @@ MonoBehaviour:
     progressMax: 0
     progressCurrent: 0
     balls: []
-  collectDropsJob:
-    name: 
-    progressMax: 0
-    progressCurrent: 0
-    balls: []
-    itemsToCollect: []
-  lumberJob:
-    name: 
-    progressMax: 0
-    progressCurrent: 0
-    balls: []
-    trees: []
 --- !u!212 &109331872
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -404,6 +412,24 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &109331873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109331867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c7b26cd06424c80abf2c6b3dd3cd7d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collectDropsJob:
+    name: 
+    progressMax: 0
+    progressCurrent: 0
+    balls: []
+    itemsToCollect: []
 --- !u!1 &109672137
 GameObject:
   m_ObjectHideFlags: 0
@@ -2877,6 +2903,8 @@ GameObject:
   - component: {fileID: 920691811}
   - component: {fileID: 920691812}
   - component: {fileID: 920691810}
+  - component: {fileID: 920691813}
+  - component: {fileID: 920691814}
   m_Layer: 0
   m_Name: NPC (1)
   m_TagString: Untagged
@@ -2990,18 +3018,42 @@ MonoBehaviour:
     progressMax: 0
     progressCurrent: 0
     balls: []
-  collectDropsJob:
-    name: 
-    progressMax: 0
-    progressCurrent: 0
-    balls: []
-    itemsToCollect: []
+--- !u!114 &920691813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 920691808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 291196c9e7524430824f1468051c5344, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   lumberJob:
     name: 
     progressMax: 0
     progressCurrent: 0
     balls: []
     trees: []
+--- !u!114 &920691814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 920691808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c7b26cd06424c80abf2c6b3dd3cd7d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collectDropsJob:
+    name: 
+    progressMax: 0
+    progressCurrent: 0
+    balls: []
+    itemsToCollect: []
 --- !u!1 &940633445
 GameObject:
   m_ObjectHideFlags: 0
@@ -3175,6 +3227,8 @@ GameObject:
   - component: {fileID: 949410563}
   - component: {fileID: 949410561}
   - component: {fileID: 949410562}
+  - component: {fileID: 949410565}
+  - component: {fileID: 949410566}
   m_Layer: 0
   m_Name: NPC (2)
   m_TagString: Untagged
@@ -3201,18 +3255,6 @@ MonoBehaviour:
     progressMax: 0
     progressCurrent: 0
     balls: []
-  collectDropsJob:
-    name: 
-    progressMax: 0
-    progressCurrent: 0
-    balls: []
-    itemsToCollect: []
-  lumberJob:
-    name: 
-    progressMax: 0
-    progressCurrent: 0
-    balls: []
-    trees: []
 --- !u!195 &949410562
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3300,6 +3342,42 @@ Transform:
   m_Father: {fileID: 211877583}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &949410565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 949410560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 291196c9e7524430824f1468051c5344, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lumberJob:
+    name: 
+    progressMax: 0
+    progressCurrent: 0
+    balls: []
+    trees: []
+--- !u!114 &949410566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 949410560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c7b26cd06424c80abf2c6b3dd3cd7d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collectDropsJob:
+    name: 
+    progressMax: 0
+    progressCurrent: 0
+    balls: []
+    itemsToCollect: []
 --- !u!1 &953111329
 GameObject:
   m_ObjectHideFlags: 0

@@ -39,7 +39,7 @@ public class JobsManager : MonoBehaviour
 
         for (int i = 0; i < balls; i++)
         {
-            avaibleBalls[i].LumberTrees(job);
+            avaibleBalls[i].GetComponent<BallLumberJob>().LumberTrees(job);
             usedBalls.Add(avaibleBalls[i]);
         }
 
@@ -75,7 +75,7 @@ public class JobsManager : MonoBehaviour
         
         for (int i = 0; i < balls; i++)
         {
-            avaibleBalls[i].CollectAllItems(job);
+            avaibleBalls[i].GetComponent<BallCollectJob>().CollectAllItems(job);
             usedBalls.Add(avaibleBalls[i]);
         }
 
