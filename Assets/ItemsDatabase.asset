@@ -15,3 +15,6 @@ MonoBehaviour:
   wood:
     name: "\u0414\u0435\u0440\u0435\u0432\u043E"
     sprite: {fileID: 21300000, guid: 7b91ae6536dab41829f68583112eaf1d, type: 3}
+  BrushWood:
+    name: "\u0425\u0432\u043E\u0440\u043E\u0441\u0442"
+    sprite: {fileID: 21300000, guid: 38bc5ccc10d684f1f884b475b284be57, type: 3}

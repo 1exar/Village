@@ -5,10 +5,15 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Items/Database", fileName = "ItemsDatabase")]
 public class ItemDatabase : ScriptableObject
 {
-    [SerializeField]
-    public WoodItem wood;
+    [SerializeField] public WoodItem wood;
+    [SerializeField] public BrushWoodItem BrushWood;
     [Serializable]
     public class WoodItem : Item
+    {
+        
+    }
+    [Serializable]
+    public class BrushWoodItem : Item
     {
         
     }

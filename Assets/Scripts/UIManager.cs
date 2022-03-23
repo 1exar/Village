@@ -11,6 +11,8 @@ public class UIManager : MonoBehaviour
     public List<GameObject> panels;
     public GameObject lumberJobPane, collectChoiseItemsPanel;
 
+    public HeaderPanel header;
+    
     public static UIManager I;
 
     private void Awake()

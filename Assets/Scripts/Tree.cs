@@ -25,7 +25,8 @@ public class Tree : MonoBehaviour, IMined
         hpSlider.maxValue = hp;
         hpSlider.value = hp;
         _itemsToDrop.Add(new ItemsToDrop(GameManager.I.items.wood, woodDrop, 100));
-        DropItems();
+        _itemsToDrop.Add(new ItemsToDrop(GameManager.I.items.BrushWood, 100, 100));
+        //DropItems();
     }
 
     public void OnMouseOver()
@@ -40,33 +41,7 @@ public class Tree : MonoBehaviour, IMined
 
     public void DropItems()
     {
-        foreach (var drop in _itemsToDrop)
-        {
-            if (drop.chance == 100)
-            {
-                DropedItem droped = Instantiate(GameManager.I.dropItemPrefab, transform.position, new Quaternion())
-                    .GetComponent<DropedItem>();
-                droped.gameObject.transform.parent = null;
-                droped.Init(drop.itemsToDrop, drop.count);
-                WorldResourceManager.I.dropedItems.Add(droped);
-            }
-            else
-            {
-                int chance = Random.Range(0, 100);
-                if (chance >= drop.chance)
-                {
-                    DropedItem droped = Instantiate(GameManager.I.dropItemPrefab, transform.position, new Quaternion())
-                        .GetComponent<DropedItem>();
-                    droped.gameObject.transform.parent = null;
-                    droped.Init(drop.itemsToDrop, drop.count);
-                    WorldResourceManager.I.dropedItems.Add(droped);
-                }
-                else
-                {
-                    continue;
-                }
-            }
-        }
+        WorldResourceManager.I.SpawnDropItems(_itemsToDrop, transform.position);
     }
 
     public void TakeHurt(int dmg)
