@@ -25,6 +25,7 @@ public class Tree : MonoBehaviour, IMined
         hpSlider.maxValue = hp;
         hpSlider.value = hp;
         _itemsToDrop.Add(new ItemsToDrop(GameManager.I.items.wood, woodDrop, 100));
+        DropItems();
     }
 
     public void OnMouseOver()

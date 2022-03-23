@@ -7,13 +7,16 @@ using System.Linq;
 public class CollectJobPanel : MonoBehaviour
 {
 
-    public Slider countSlider, ballsSlider;
-    public Text ballsText, countText;
-    
-    
+    public Slider ballsSlider;
+    public Text ballsText;
+    public Dropdown avaibleItemsDropdown;
+    public Toggle collectAllDropsToggle;
+    [SerializeField]
+    private List<string> avaibleItemsList = new List<string>();
+    private List<DropedItem> _dropedItemsList = new List<DropedItem>();
+
     public void Open()
     {
-        countSlider.maxValue = WorldResourceManager.I.AvaibleWood();
         ballsSlider.maxValue = GameManager.I.balls.Count(b => !b.haveTask);
         RefreshSliders();
     }
@@ -21,13 +24,38 @@ public class CollectJobPanel : MonoBehaviour
     public void RefreshSliders()
     {
         ballsText.text = ballsSlider.value + "";
-        countText.text = countSlider.value + "";
     }
 
     public void ChoiseJob()
     {
-        JobsManager.I.LumberTrees((int)countSlider.value,(int)ballsSlider.value);
         UIManager.I.CloseAllPanels();
+    }
+
+    public void ChangeDropDownState(bool collectAll)
+    {
+        if (collectAll)
+        {
+            avaibleItemsDropdown.gameObject.SetActive(false);
+        }
+        else
+        {
+            RefreshAvaibleItemsDropdown();
+            avaibleItemsDropdown.gameObject.SetActive(true);
+        }
+    }
+
+    private void RefreshAvaibleItemsDropdown()
+    {
+        avaibleItemsDropdown.ClearOptions();
+
+        foreach (var item in WorldResourceManager.I.dropedItems)
+        {
+            avaibleItemsList.Add(item.Name);
+        }
+
+        _dropedItemsList = WorldResourceManager.I.dropedItems;
+        avaibleItemsList = avaibleItemsList.Distinct().ToList();
+        avaibleItemsDropdown.AddOptions(avaibleItemsList);
     }
     
 }

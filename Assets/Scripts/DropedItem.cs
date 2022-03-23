@@ -10,7 +10,24 @@ public class DropedItem : MonoBehaviour
 {
     [SerializeField]
     private Item currentItem;
+    public string Name
+    {
+        get
+        {
+            return currentItem.Name;
+        }
+        protected set{}
+    }
     private int count;
+    public int Count
+    {
+        get
+        {
+            return count;
+        }
+
+        protected set{}
+    }
     [SerializeField]
     private SpriteRenderer sp;
     public TMP_Text countText;
