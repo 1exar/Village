@@ -18,6 +18,8 @@ public class CameraController : MonoBehaviour, IDragHandler
 
     public bool Draged;
 
+    public bool canDrag = true;
+    
     public static CameraController I;
 
     private void Awake()
@@ -29,6 +31,7 @@ public class CameraController : MonoBehaviour, IDragHandler
 
     public void OnDrag(PointerEventData eventData)
     {
+        if(!canDrag) return;
         float xPos = cameraTransform.position.x;
         float zPos = cameraTransform.position.y;
 
@@ -50,6 +53,6 @@ public class CameraController : MonoBehaviour, IDragHandler
         
         Draged = true;
         
-        print(Draged);
+      //  print(Draged);
     }
 }

@@ -13,14 +13,13 @@ public class TouchControler : MonoBehaviour, IPointerClickHandler, IPointerUpHan
         Ray touch = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(touch, out RaycastHit hit, 20000f))
         {
-            /*if (hit.collider.gameObject.GetComponent<Building>())
+            if (hit.collider.gameObject.GetComponent<ObjectSelector>())
             {
-                if (!GameManager.CameraController.Draged)
+                if (!CameraController.I.Draged)
                 {
-                    GameManager.GameUIManager.OpenPanel(
-                        hit.collider.gameObject.GetComponent<Building>());
+                    print("hit point");
                 }
-            }*/
+            }
         }
     }
     public void OnPointerUp(PointerEventData eventData)

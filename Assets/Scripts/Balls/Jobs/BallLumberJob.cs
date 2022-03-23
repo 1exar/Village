@@ -36,6 +36,15 @@ public class BallLumberJob : MonoBehaviour
             {
                 Debug.Log("NoTree");
                 GetComponent<BallAi>().EndJob();
+                List<DropedItem> items = new List<DropedItem>();
+                foreach (var item in WorldResourceManager.I.dropedItems)
+                {
+                    if (item.Name == GameManager.I.items.wood.Name || item.Name == GameManager.I.items.BrushWood.Name)
+                    {
+                        items.Add(item);
+                    }
+                }
+                CollectDrop nextJob = new CollectDrop(1, items);
                 yield break;
             }
         }

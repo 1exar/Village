@@ -10,6 +10,7 @@ public class BallCollectJob : MonoBehaviour
     public void CollectAllItems(CollectDrops job)
     {
         collectDropsJob = job;
+        GetComponent<BallAi>().haveTask = true;
         StartCoroutine(ProccesCollectDropJob(job));
     }
 
@@ -44,7 +45,7 @@ public class BallCollectJob : MonoBehaviour
         {
             if (!_pickupDrop)
             {
-                if (Vector2.Distance(transform.position, _myDrop.transform.position) > 0.2f)
+                if (Vector2.Distance(transform.position, _myDrop.transform.position) > 1f)
                 {
                     Debug.Log("go to drop");
                     GetComponent<NavMeshAgent>().destination = _myDrop.transform.position;

@@ -14,15 +14,10 @@ public class WorldResourceManager : MonoBehaviour
 
     public int AvaibleWood()
     {
-        int i = 0;
         _trees.Clear();
         _trees = GameObject.FindGameObjectsWithTag("Tree").Where(t => !t.GetComponent<Tree>().ocuped).ToList();
-        foreach (var tree in _trees)
-        {
-            i += tree.GetComponent<Tree>().woodDrop;
-        }
 
-        return i;
+        return _trees.Count;
     }
 
     public void SpawnDropItems(List<ItemsToDrop> itemsToDrop, Vector3 pos)

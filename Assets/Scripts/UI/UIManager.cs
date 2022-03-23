@@ -9,11 +9,13 @@ public class UIManager : MonoBehaviour
 {
 
     public List<GameObject> panels;
-    public GameObject lumberJobPane, collectChoiseItemsPanel;
+    public GameObject lumberJobPane, collectChoiseItemsPanel, applyButton;
 
     public HeaderPanel header;
     
     public static UIManager I;
+
+    public List<GameObject> uiToHide;
 
     private void Awake()
     {
@@ -33,6 +35,24 @@ public class UIManager : MonoBehaviour
         lumberJobPane.SetActive(true);
     }
 
+    public void CloseUI()
+    {
+        foreach (var ui in uiToHide)
+        {
+            ui.SetActive(false);
+        }
+        applyButton.SetActive(true);
+    }
+
+    public void ShowUI()
+    {
+        foreach (var ui in uiToHide)
+        {
+            ui.SetActive(true);
+        }
+        applyButton.SetActive(false);
+    }
+    
     public void OnCollectJobChoise()
     {
         collectChoiseItemsPanel.SetActive(true);

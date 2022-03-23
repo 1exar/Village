@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using Jobs;
 
 public class CollectJobPanel : MonoBehaviour
 {
@@ -29,7 +30,8 @@ public class CollectJobPanel : MonoBehaviour
 
     public void ChoiseJob()
     {
-        JobsManager.I.CollectItems((int)ballsSlider.value, _dropedItemsList);
+        CollectDrop job = new CollectDrop((int) ballsSlider.value, _dropedItemsList);
+       // JobsManager.I.CollectItems();
         UIManager.I.CloseAllPanels();
     }
 
