@@ -7,6 +7,8 @@ public class BuildingManager : MonoBehaviour
 {
 
     public static BuildingManager I;
+
+    public Storage mainStorage;
     
     [SerializeField]
     public List<Building> buildings = new List<Building>();

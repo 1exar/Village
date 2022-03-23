@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Items;
@@ -10,6 +11,14 @@ public class DropedItem : MonoBehaviour
 {
     [SerializeField]
     private Item currentItem;
+    public Item Item
+    {
+        get
+        {
+            return currentItem;
+        }
+        protected set{}
+    }
     public string Name
     {
         get
@@ -31,7 +40,10 @@ public class DropedItem : MonoBehaviour
     [SerializeField]
     private SpriteRenderer sp;
     public TMP_Text countText;
-    
+
+    public bool occuped = false, moveToBall = false;
+    private Vector3 offSet;
+    public Transform ballPos;
     public void Init(Item item, int count)
     {
         currentItem = item;
@@ -39,4 +51,17 @@ public class DropedItem : MonoBehaviour
         this.count = count;
         countText.text = item.Name + "\n" + count;
     }
+
+    public void Update()
+    {
+        if(moveToBall)
+            transform.position = ballPos.position - offSet;
+    }
+
+    public void MoveToStorage()
+    {
+        moveToBall = false;
+        WorldResourceManager.I.dropedItems.Remove(this);
+    }
+    
 }

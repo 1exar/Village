@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Items;
 using Jobs;
+using UnityEditor;
 using UnityEngine;
 
 public class JobsManager : MonoBehaviour
@@ -10,8 +11,8 @@ public class JobsManager : MonoBehaviour
 
     public static JobsManager I;
 
-    [SerializeField]
-    public List<MineTrees> mineTreeTasks = new List<MineTrees>();
+    [SerializeField] public List<MineTrees> mineTreeTasks = new List<MineTrees>();
+    [SerializeField] public List<CollectDrops> collectAllDropTasks = new List<CollectDrops>();
 
     private void Awake()
     {
@@ -22,6 +23,7 @@ public class JobsManager : MonoBehaviour
     {
         MineTrees job = new MineTrees();
         job.progressMax = count;
+        job.name = "Лесохуй";
         List<BallAi> avaibleBalls = GameManager.I.balls.Where(b => !b.haveTask).ToList();
         List<BallAi> usedBalls = new List<BallAi>();
 
@@ -45,9 +47,41 @@ public class JobsManager : MonoBehaviour
         mineTreeTasks.Add(job);
     }
 
-    public void CollectItems(int count, int balls, Item[] type = null)
+    public void CollectItems(int balls, List<DropedItem> type)
     {
+        CollectDrops job = new CollectDrops();
+        job.progressMax = type.Count;
+        job.name = "Искать мусор";
+        List<BallAi> avaibleBalls = GameManager.I.balls.Where(b => !b.haveTask).ToList();
+        List<BallAi> usedBalls = new List<BallAi>();
+
+        if (type.Count == 0)
+        {
+            job.itemsToCollect.Clear();
+            job.itemsToCollect = WorldResourceManager.I.dropedItems;
+        }
+        else
+        {
+            job.itemsToCollect.Clear();
+            foreach (var dropedItem in WorldResourceManager.I.dropedItems)
+            {
+                foreach (var item in type)
+                {
+                    if(dropedItem.Item.Name == item.Name) job.itemsToCollect.Add(dropedItem);
+                }
+            }
+        }
+
         
+        for (int i = 0; i < balls; i++)
+        {
+            avaibleBalls[i].CollectAllItems(job);
+            usedBalls.Add(avaibleBalls[i]);
+        }
+
+        job.balls = usedBalls;
+        collectAllDropTasks.Add(job);
+
     }
 
 }

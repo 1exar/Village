@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class GameManager : MonoBehaviour
     public List<BallAi> balls;
 
     public GameObject dropItemPrefab;
+
+    public NavMeshSurface2d nav;
     
     private void Awake()
     {

@@ -13,6 +13,7 @@ public class CollectJobPanel : MonoBehaviour
     public Toggle collectAllDropsToggle;
     [SerializeField]
     private List<string> avaibleItemsList = new List<string>();
+    [SerializeField]
     private List<DropedItem> _dropedItemsList = new List<DropedItem>();
 
     public void Open()
@@ -28,6 +29,7 @@ public class CollectJobPanel : MonoBehaviour
 
     public void ChoiseJob()
     {
+        JobsManager.I.CollectItems((int)ballsSlider.value, _dropedItemsList);
         UIManager.I.CloseAllPanels();
     }
 
@@ -35,12 +37,14 @@ public class CollectJobPanel : MonoBehaviour
     {
         if (collectAll)
         {
+            _dropedItemsList.Clear();
             avaibleItemsDropdown.gameObject.SetActive(false);
         }
         else
         {
             RefreshAvaibleItemsDropdown();
             avaibleItemsDropdown.gameObject.SetActive(true);
+            OnDropdownSelect(avaibleItemsDropdown.value);
         }
     }
 
@@ -48,14 +52,28 @@ public class CollectJobPanel : MonoBehaviour
     {
         avaibleItemsDropdown.ClearOptions();
 
+        avaibleItemsList.Clear();
+        
         foreach (var item in WorldResourceManager.I.dropedItems)
         {
             avaibleItemsList.Add(item.Name);
         }
 
-        _dropedItemsList = WorldResourceManager.I.dropedItems;
         avaibleItemsList = avaibleItemsList.Distinct().ToList();
         avaibleItemsDropdown.AddOptions(avaibleItemsList);
+    }
+
+    public void OnDropdownSelect(int itemId)
+    {
+        _dropedItemsList.Clear();
+        foreach (var item in WorldResourceManager.I.dropedItems)
+        {
+            if (item.Name == avaibleItemsList[itemId])
+            {
+                _dropedItemsList.Add(item);
+                break;
+            }
+        }
     }
     
 }

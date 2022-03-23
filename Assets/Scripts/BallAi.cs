@@ -51,14 +51,90 @@ public class BallAi : MonoBehaviour
         }
     }
 
+    //Collec tAll Items Job
+    public void CollectAllItems(CollectDrops job)
+    {
+        haveTask = true;
+        currentJob = job;
+        collectDropsJob = job;
+        followMouse = false;
+        StartCoroutine(ProccesCollectDropJob(job));
+    }
+
+    [SerializeField] private CollectDrops collectDropsJob;
+    private GameObject _myDrop;
+    private bool _pickupDrop;
+    private IEnumerator ProccesCollectDropJob(CollectDrops job)
+    {
+        if (!_myDrop)
+        {
+            List<DropedItem> avaibleDropedItems = job.itemsToCollect.Where(i => !i.occuped).ToList();
+            if (avaibleDropedItems.Count > 0)
+            {
+                int dropId = Random.Range(0, avaibleDropedItems.Count);
+                avaibleDropedItems[dropId].occuped = true;
+                _myDrop = avaibleDropedItems[dropId].gameObject;
+            }
+            else if (avaibleDropedItems.Count == 1)
+            {
+                avaibleDropedItems[0].occuped = true;
+                _myDrop = avaibleDropedItems[0].gameObject;
+            }
+            else
+            {
+                Debug.Log("No drop");
+                EndJob();
+                followMouse = true;
+                yield break;
+                yield return false;
+            }
+        }
+        else
+        {
+            if (!_pickupDrop)
+            {
+                if (Vector2.Distance(transform.position, _myDrop.transform.position) > 0.2f)
+                {
+                    Debug.Log("go to drop");
+                    _agent.destination = _myDrop.transform.position;
+                    yield return new WaitForSeconds(1);
+                }
+                else
+                {
+                    _myDrop.GetComponent<DropedItem>().ballPos = transform;
+                    _myDrop.GetComponent<DropedItem>().moveToBall = true;
+                    _pickupDrop = true;
+                }
+            }
+            else
+            {
+                if (Vector2.Distance(transform.position, BuildingManager.I.mainStorage.transform.position) > 1f)
+                {
+                    _agent.destination = BuildingManager.I.mainStorage.transform.position;
+                    yield return new WaitForSeconds(1);
+                }
+                else
+                {
+                    _myDrop.GetComponent<DropedItem>().MoveToStorage();
+                    _pickupDrop = false;
+                    _myDrop = null;
+                }
+            }
+        }
+
+        yield return new WaitForSeconds(1);
+        StartCoroutine(ProccesCollectDropJob(job));
+    }
+    //
+    //Lumber job
     public void LumberTrees(MineTrees job)
     {
+        currentJob = job;
         lumberJob = job;
         followMouse = false;
         haveTask = true;
         StartCoroutine(ProccesLumberJob(job));
     }
-
     private GameObject _myTree;
     [SerializeField] private MineTrees lumberJob;
     private IEnumerator ProccesLumberJob(MineTrees job)
@@ -66,11 +142,11 @@ public class BallAi : MonoBehaviour
         if (!_myTree)
         {
             List<Tree> avaibleTrees = job.trees.Where(t => !t.ocuped).ToList();
-            if (avaibleTrees.Count() > 0)
+            if (avaibleTrees.Count > 0)
             {
                 int treeId = Random.Range(0, avaibleTrees.Count);
-                _myTree = avaibleTrees[treeId].gameObject;
                 avaibleTrees[treeId].ocuped = true;
+                _myTree = avaibleTrees[treeId].gameObject;
             }
             else if (avaibleTrees.Count() == 1)
             {
@@ -82,7 +158,7 @@ public class BallAi : MonoBehaviour
                 Debug.Log("NoTree");
                 EndJob();
                 followMouse = true;
-                yield return false;
+                yield break;
             }
         }
 
@@ -106,11 +182,12 @@ public class BallAi : MonoBehaviour
         yield return new WaitForSeconds(1);
         StartCoroutine(ProccesLumberJob(job));
     }
-
+    //
     public void EndJob()
     {
         lumberJob = null;
         currentJob = null;
         haveTask = false;
+        collectDropsJob = null;
     }
 }
