@@ -10,16 +10,20 @@ using Random = UnityEngine.Random;
 
 public class Tree : MonoBehaviour, IMined
 {
-
-    internal int woodDrop = 60;
-    public List<ItemsToDrop> _itemsToDrop;
+    [SerializeField]
+    private int woodDrop = 60;
+    private List<ItemsToDrop> _itemsToDrop = new List<ItemsToDrop>();
     [SerializeField]
     private int hp = 30;
     [SerializeField]
     private Slider hpSlider;
     public bool ocuped;
-    public MineTrees jobWithMe;
-    public GameObject nameText;
+    public LumberTreesTask jobWithMe;
+    [SerializeField]
+    private GameObject nameText;
+
+    public Vector3 frontPosOffset;
+    
     private void Start()
     {
         hpSlider.maxValue = hp;
@@ -28,7 +32,7 @@ public class Tree : MonoBehaviour, IMined
         _itemsToDrop.Add(new ItemsToDrop(GameManager.I.items.BrushWood, 100, 100));
     }
 
-    public void OnMouseOver()
+    public void OnMouseDown()
     {
         nameText.SetActive(true);
     }
@@ -43,7 +47,7 @@ public class Tree : MonoBehaviour, IMined
         WorldResourceManager.I.SpawnDropItems(_itemsToDrop, transform.position);
     }
 
-    public void TakeHurt(int dmg)
+    public bool TakeHurt(int dmg)
     {
         if(!hpSlider.gameObject.activeSelf) hpSlider.gameObject.SetActive(true);
         hp -= dmg;
@@ -51,21 +55,28 @@ public class Tree : MonoBehaviour, IMined
         if (hp <= 0)
         {
             Choop();
+            return false;
         }
+
+        return true;
     }
 
     public void Choop()
     {
         jobWithMe.trees.Remove(this);
-        jobWithMe.ChopOneTree(woodDrop);
         StartCoroutine(FallTree());
     }
 
     private IEnumerator FallTree()
     {
         transform.DOLocalRotate(new Vector3(90, 90), 1, RotateMode.FastBeyond360);
-        yield return new WaitForSeconds(1);
         DropItems();
+        yield return new WaitForSeconds(1);
         Destroy(gameObject);
+    }
+
+    public void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Space)) DropItems();
     }
 }

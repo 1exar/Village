@@ -7,53 +7,55 @@ namespace Jobs
 {
     public class LumberTrees
     {
-        public LumberTrees(List<GameObject> tree, int balls)
+        public LumberTrees(List<GameObject> tree, List<Ball> balls)
         {
-            MineTrees job = new MineTrees();
+            LumberTreesTask job = new LumberTreesTask();
             job.progressMax = tree.Count;
             job.name = "Лесохуй";
-            List<BallAi> avaibleBalls = GameManager.I.balls.Where(b => !b.haveTask).ToList();
-            List<BallAi> usedBalls = new List<BallAi>();
 
-            GameObject[] trees = GameObject.FindGameObjectsWithTag("Tree").Where(t => !t.GetComponent<Tree>().ocuped).ToArray();
+            // GameObject[] trees = GameObject.FindGameObjectsWithTag("Tree").Where(t => !t.GetComponent<Tree>().ocuped).ToArray();
             int c = 0;
             for (int i = 0; i < tree.Count; i++)
             {
-                Tree t = trees[i].GetComponent<Tree>();
+                Tree t = tree[i].GetComponent<Tree>();
                 t.jobWithMe = job;
                 job.trees.Add(t);
             }
 
-
-            for (int i = 0; i < balls; i++)
+            foreach (var ball in balls)
             {
-                avaibleBalls[i].GetComponent<BallLumberJob>().LumberTrees(job);
-                usedBalls.Add(avaibleBalls[i]);
+                ball.GetComponent<BallLumberJob>().LumberTrees(job);
             }
 
-            job.balls = usedBalls;
+            job.balls = balls;
             JobsManager.I.mineTreeTasks.Add(job);
+            UIManager.I.AddNewTaskToTaskList(job);
         }
     }
     
     [Serializable]
-    public class MineTrees : Task
+    public class LumberTreesTask : Task
     {
         public List<Tree> trees = new List<Tree>();
 
-        public void ChopOneTree(int woodDrop)
+        public void ChopOneTree()
         {
-            progressCurrent += woodDrop;
+            progressCurrent++;
             if (progressCurrent >= progressMax)
             {
-                if (balls.Count() != 0)
+
+                List<DropedItem> itemsToCollect = new List<DropedItem>();
+
+                foreach (var item in WorldResourceManager.I.dropedItems)
                 {
-                    foreach (var ball in balls.ToList())
+                    if (item.Name == GameManager.I.items.wood.Name || item.Name == GameManager.I.items.BrushWood.Name)
                     {
-                        ball.EndJob();
-                        balls.Remove(ball);
+                        itemsToCollect.Add(item);
                     }
                 }
+
+                CollectDrop nextJob = new CollectDrop(balls, itemsToCollect);
+                JobsManager.I.mineTreeTasks.Remove(this);
             }
         }
     }

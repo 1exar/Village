@@ -157,6 +157,7 @@ MonoBehaviour:
   buildingName: "\u0425\u0430\u0442\u0430"
   haveStorage: 1
   storage: {fileID: 5166619163828828267}
+  fronPosOffset: {x: 0, y: -2.7, z: 0}
 --- !u!114 &5166619163828828267
 MonoBehaviour:
   m_ObjectHideFlags: 0

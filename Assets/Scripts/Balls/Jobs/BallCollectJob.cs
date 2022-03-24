@@ -7,27 +7,31 @@ using UnityEngine.AI;
 
 public class BallCollectJob : MonoBehaviour
 {
-    public void CollectAllItems(CollectDrops job)
+    
+    public float doDelay;
+
+    public void CollectAllItems(CollectDropTask job)
     {
         collectDropsJob = job;
-        GetComponent<BallAi>().haveTask = true;
-        StartCoroutine(ProccesCollectDropJob(job));
+        GetComponent<Ball>().haveTask = true;
+        GetComponent<Ball>().currentJob = Ball.jobVariant.collect;
+        GetComponent<Ball>().jobCoroutine = StartCoroutine(ProccesCollectDropJob(job));
     }
 
-    [SerializeField] private CollectDrops collectDropsJob;
+    [SerializeField] private CollectDropTask collectDropsJob;
     private GameObject _myDrop;
     private bool _pickupDrop;
 
-    private IEnumerator ProccesCollectDropJob(CollectDrops job)
+    private IEnumerator ProccesCollectDropJob(CollectDropTask job)
     {
+        GetComponent<Ball>().haveTask = true;
         if (!_myDrop)
         {
             List<DropedItem> avaibleDropedItems = job.itemsToCollect.Where(i => !i.occuped).ToList();
             if (avaibleDropedItems.Count > 0)
             {
-                int dropId = Random.Range(0, avaibleDropedItems.Count);
-                avaibleDropedItems[dropId].occuped = true;
-                _myDrop = avaibleDropedItems[dropId].gameObject;
+                _myDrop = FindClosestEnemy(avaibleDropedItems).gameObject;
+                _myDrop.GetComponent<DropedItem>().occuped = true;
             }
             else if (avaibleDropedItems.Count == 1)
             {
@@ -36,8 +40,7 @@ public class BallCollectJob : MonoBehaviour
             }
             else
             {
-                Debug.Log("No drop");
-                GetComponent<BallAi>().EndJob();
+                GetComponent<Ball>().EndJob();
                 yield break;
             }
         }
@@ -47,9 +50,8 @@ public class BallCollectJob : MonoBehaviour
             {
                 if (Vector2.Distance(transform.position, _myDrop.transform.position) > 1f)
                 {
-                    Debug.Log("go to drop");
                     GetComponent<NavMeshAgent>().destination = _myDrop.transform.position;
-                    yield return new WaitForSeconds(1);
+                    yield return new WaitForSeconds(doDelay);
                 }
                 else
                 {
@@ -60,10 +62,10 @@ public class BallCollectJob : MonoBehaviour
             }
             else
             {
-                if (Vector2.Distance(transform.position, BuildingManager.I.mainStorage.transform.position) > 1f)
+                if (Vector2.Distance(transform.position, BuildingManager.I.mainStorage.transform.position + BuildingManager.I.mainStorage.GetComponent<Building>().fronPosOffset) > 1f)
                 {
-                    GetComponent<NavMeshAgent>().destination = BuildingManager.I.mainStorage.transform.position;
-                    yield return new WaitForSeconds(1);
+                    GetComponent<NavMeshAgent>().destination = BuildingManager.I.mainStorage.transform.position + BuildingManager.I.mainStorage.GetComponent<Building>().fronPosOffset;
+                    yield return new WaitForSeconds(doDelay);
                 }
                 else
                 {
@@ -74,7 +76,45 @@ public class BallCollectJob : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(1);
-        StartCoroutine(ProccesCollectDropJob(job));
+        yield return new WaitForSeconds(doDelay);
+        GetComponent<Ball>().jobCoroutine = StartCoroutine(ProccesCollectDropJob(job));
     }
+    
+    DropedItem FindClosestEnemy(List<DropedItem> objects)
+    {
+        DropedItem closest = null;
+        float distance = Mathf.Infinity;
+        Vector3 position = transform.position;
+        foreach (DropedItem go in objects) {
+            Vector3 diff = go.transform.position - position;
+            float curDistance = diff.sqrMagnitude;
+            if(curDistance< distance) {
+                closest = go;
+                distance = curDistance;
+            }
+        }
+        return closest;
+    }
+
+    public void CancelJob()
+    {
+        StopAllCoroutines();
+        if (_myDrop)
+        {
+            if (_pickupDrop)
+            {
+                DropedItem item = _myDrop.GetComponent<DropedItem>();
+                item.occuped = false;
+                item.used = false;
+                item.jobWithMe = null;
+                item.moveToBall = false;
+                _pickupDrop = false;
+            }
+
+            _myDrop = null;
+            
+            GetComponent<NavMeshAgent>().ResetPath();
+        }
+    }
+    
 }

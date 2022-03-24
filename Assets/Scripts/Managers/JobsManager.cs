@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using Items;
 using Jobs;
 using UnityEditor;
@@ -11,8 +12,8 @@ public class JobsManager : MonoBehaviour
 
     public static JobsManager I;
 
-    [SerializeField] public List<MineTrees> mineTreeTasks = new List<MineTrees>();
-    [SerializeField] public List<CollectDrops> collectAllDropTasks = new List<CollectDrops>();
+    [SerializeField] public List<LumberTreesTask> mineTreeTasks = new List<LumberTreesTask>();
+    [SerializeField] public List<CollectDropTask> collectAllDropTasks = new List<CollectDropTask>();
 
     private void Awake()
     {
@@ -28,6 +29,15 @@ namespace Jobs
     {
         public string name;
         public int progressMax, progressCurrent;
-        public List<BallAi> balls;
+        public List<Ball> balls;
+
+        public void CancelTask()
+        {
+            progressCurrent = progressMax;
+            foreach (var ball in balls)
+            {
+                ball.CancelJob();
+            }
+        }
     }
 }

@@ -19,8 +19,8 @@ public class LumberJobPanel : MonoBehaviour
 
     public void Open()
     {
-        //  count.maxValue = WorldResourceManager.I.AvaibleWood();
-        avaibleBalls.maxValue = GameManager.I.balls.Count(b => !b.haveTask);
+        avaibleBalls.maxValue = GameManager.I.balls.Count(b => !b.GetComponent<Ball>().haveTask);
+        treesCount.text = 0 + "";
         RefreshSliders();
     }
 
@@ -37,7 +37,7 @@ public class LumberJobPanel : MonoBehaviour
 
     public void ChoiseJob()
     {
-        LumberTrees lumber = new LumberTrees(trees, (int) avaibleBalls.value);
+        LumberTrees lumber = new LumberTrees(trees, GameManager.I.avaibleBalls((int)avaibleBalls.value));
        // JobsManager.I.LumberTrees((int)count.value,(int)avaibleBalls.value);
        UIManager.I.CloseAllPanels();
     }

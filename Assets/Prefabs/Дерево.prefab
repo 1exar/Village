@@ -631,6 +631,7 @@ MonoBehaviour:
     balls: []
     trees: []
   nameText: {fileID: 3241161203883968249}
+  frontPosOffset: {x: 0, y: -2, z: 0}
 --- !u!114 &7161291927533920245
 MonoBehaviour:
   m_ObjectHideFlags: 0

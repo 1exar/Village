@@ -4,10 +4,10 @@ using Items;
 public interface IMined
 {
 
-    void OnMouseOver();
+    void OnMouseDown();
     void OnMouseExit();
     void Choop();
     void DropItems();
-    void TakeHurt(int dmg);
+    bool TakeHurt(int dmg);
 
 }

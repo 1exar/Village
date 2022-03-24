@@ -7,25 +7,28 @@ using UnityEngine.AI;
 
 public class BallLumberJob : MonoBehaviour
 {
-    //
-    //Lumber job
-    public void LumberTrees(MineTrees job)
+    
+    public float doDelay;
+
+    public void LumberTrees(LumberTreesTask job)
     {
         lumberJob = job;
-        StartCoroutine(ProccesLumberJob(job));
+        GetComponent<Ball>().currentJob = Ball.jobVariant.lumber;
+        GetComponent<Ball>().haveTask = true;
+        GetComponent<Ball>().jobCoroutine = StartCoroutine(ProccesLumberJob(job));
     }
     private GameObject _myTree;
-    [SerializeField] private MineTrees lumberJob;
-    private IEnumerator ProccesLumberJob(MineTrees job)
+    [SerializeField] private LumberTreesTask lumberJob;
+    private IEnumerator ProccesLumberJob(LumberTreesTask job)
     {
         if (!_myTree)
         {
             List<Tree> avaibleTrees = job.trees.Where(t => !t.ocuped).ToList();
             if (avaibleTrees.Count > 0)
             {
-                int treeId = Random.Range(0, avaibleTrees.Count);
-                avaibleTrees[treeId].ocuped = true;
-                _myTree = avaibleTrees[treeId].gameObject;
+               // int treeId = Random.Range(0, avaibleTrees.Count);
+               _myTree = FindClosestEnemy(avaibleTrees).gameObject;
+               _myTree.GetComponent<Tree>().ocuped = true;
             }
             else if (avaibleTrees.Count() == 1)
             {
@@ -34,39 +37,61 @@ public class BallLumberJob : MonoBehaviour
             }
             else
             {
-                Debug.Log("NoTree");
-                GetComponent<BallAi>().EndJob();
-                List<DropedItem> items = new List<DropedItem>();
-                foreach (var item in WorldResourceManager.I.dropedItems)
-                {
-                    if (item.Name == GameManager.I.items.wood.Name || item.Name == GameManager.I.items.BrushWood.Name)
-                    {
-                        items.Add(item);
-                    }
-                }
-                CollectDrop nextJob = new CollectDrop(1, items);
+                GetComponent<Ball>().EndJob();
                 yield break;
             }
         }
 
         if (_myTree)
         {
-            if (Vector2.Distance(transform.position, _myTree.transform.position) > 1)
+            if (Vector2.Distance(transform.position, _myTree.transform.position + _myTree.GetComponent<Tree>().frontPosOffset) > 1)
             {
-                Debug.Log("go to tree");
-                GetComponent<NavMeshAgent>().destination = _myTree.transform.position;
-                yield return new WaitForSeconds(1);
+                GetComponent<NavMeshAgent>().destination = _myTree.transform.position + _myTree.GetComponent<Tree>().frontPosOffset;
+                yield return new WaitForSeconds(doDelay);
             }
             else
             {
-                Debug.Log("choop tree");
-                yield return new WaitForSeconds(1);
-                if(_myTree)
-                    _myTree.GetComponent<Tree>().TakeHurt(10);
+                yield return new WaitForSeconds(doDelay);
+                if(_myTree.GetComponent<Tree>())
+                    if (!_myTree.GetComponent<Tree>().TakeHurt(10))
+                    {
+                        job.ChopOneTree();
+                        _myTree = null;
+                    }
             }
         }
         
-        yield return new WaitForSeconds(1);
-        StartCoroutine(ProccesLumberJob(job));
+        yield return new WaitForSeconds(doDelay);
+        GetComponent<Ball>().jobCoroutine = StartCoroutine(ProccesLumberJob(job));
     }
+    
+    Tree FindClosestEnemy(List<Tree> objects)
+    {
+        Tree closest = null;
+        float distance = Mathf.Infinity;
+        Vector3 position = transform.position;
+        foreach (Tree go in objects) {
+            Vector3 diff = go.transform.position - position;
+            float curDistance = diff.sqrMagnitude;
+            if(curDistance< distance) {
+                closest = go;
+                distance = curDistance;
+            }
+        }
+        return closest;
+    }
+
+    public void CancelJob()
+    {
+        StopAllCoroutines();
+        if (_myTree)
+        {
+            Tree tree = _myTree.GetComponent<Tree>();
+            tree.ocuped = false;
+            tree.jobWithMe = null;
+            _myTree = null;
+        }
+        GetComponent<NavMeshAgent>().ResetPath();
+    }
+    
 }

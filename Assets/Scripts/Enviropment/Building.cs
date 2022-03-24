@@ -12,7 +12,8 @@ public class Building : MonoBehaviour, IBuilding
     [SerializeField]
     public Storage storage;
 
-
+    public Vector3 fronPosOffset;
+    
     public void OnMouseOver()
     {
       //  throw new NotImplementedException();

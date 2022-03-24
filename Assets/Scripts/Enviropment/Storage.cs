@@ -23,6 +23,9 @@ public class Storage : MonoBehaviour
     
     public void GetAllItems()
     {
+        
+        print("Get All items");
+        
         foreach (var item in items)
         {
             Debug.Log(item.Key + " " + item.Value);

@@ -1,23 +1,26 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Jobs
 {
     public class CollectDrop
     {
-        public CollectDrop(int balls, List<DropedItem> type)
+        public CollectDrop(List<Ball> balls, List<DropedItem> type)
         {
-            CollectDrops job = new CollectDrops();
-            job.progressMax = type.Count;
+            CollectDropTask job = new CollectDropTask();
             job.name = "Искать мусор";
-            List<BallAi> avaibleBalls = GameManager.I.balls.Where(b => !b.haveTask).ToList();
-            List<BallAi> usedBalls = new List<BallAi>();
 
             if (type.Count == 0)
             {
                 job.itemsToCollect.Clear();
                 job.itemsToCollect = WorldResourceManager.I.dropedItems;
+                job.progressMax = WorldResourceManager.I.dropedItems.Count;
+                foreach (var item in WorldResourceManager.I.dropedItems)
+                {
+                    item.jobWithMe = job;
+                }
             }
             else
             {
@@ -26,29 +29,42 @@ namespace Jobs
                 {
                     foreach (var item in type)
                     {
-                        if(dropedItem.Item.Name == item.Name) job.itemsToCollect.Add(dropedItem);
+                        if (dropedItem.Item.Name == item.Name && dropedItem.used == false)
+                        {
+                            dropedItem.used = true;
+                            job.itemsToCollect.Add(dropedItem);
+                            dropedItem.jobWithMe = job;
+                            job.progressMax++;
+                        }
                     }
                 }
             }
 
-        
-            for (int i = 0; i < balls; i++)
+            foreach (var ball in balls)
             {
-                avaibleBalls[i].GetComponent<BallCollectJob>().CollectAllItems(job);
-                usedBalls.Add(avaibleBalls[i]);
+                ball.GetComponent<BallCollectJob>().CollectAllItems(job);
             }
 
-            job.balls = usedBalls;
+            job.balls = balls;
             JobsManager.I.collectAllDropTasks.Add(job);
-
+            UIManager.I.AddNewTaskToTaskList(job);
         }
     }
     
     [Serializable]
-    public class CollectDrops : Task
+    public class CollectDropTask : Task
     {
 
         public List<DropedItem> itemsToCollect = new List<DropedItem>();
+
+        public void OnItemMovedToStorage()
+        {
+            progressCurrent++;
+            if (progressCurrent >= progressMax)
+            {
+                JobsManager.I.collectAllDropTasks.Remove(this);
+            }
+        }
 
     }
 }

@@ -37,11 +37,7 @@ public class ObjectSelector : MonoBehaviour
             case FindType.Drop:
                 break;
         }
-
-        foreach (var r in result)
-        {
-            print(r.name);
-        }
+        
         return result;
     }
 

@@ -19,7 +19,7 @@ public class CollectJobPanel : MonoBehaviour
 
     public void Open()
     {
-        ballsSlider.maxValue = GameManager.I.balls.Count(b => !b.haveTask);
+        ballsSlider.maxValue = GameManager.I.balls.Count(b => !b.GetComponent<Ball>().haveTask);
         RefreshSliders();
     }
 
@@ -30,8 +30,8 @@ public class CollectJobPanel : MonoBehaviour
 
     public void ChoiseJob()
     {
-        CollectDrop job = new CollectDrop((int) ballsSlider.value, _dropedItemsList);
-       // JobsManager.I.CollectItems();
+        List<Ball> balls = new List<Ball>();
+        CollectDrop job = new CollectDrop(GameManager.I.avaibleBalls((int)ballsSlider.value) , _dropedItemsList);
         UIManager.I.CloseAllPanels();
     }
 
@@ -77,5 +77,4 @@ public class CollectJobPanel : MonoBehaviour
             }
         }
     }
-    
 }

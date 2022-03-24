@@ -16,12 +16,6 @@ public class BallAi : MonoBehaviour
     private int _startOrder;
     [SerializeField] private bool followMouse;
 
-    public bool haveTask = false;
-    [SerializeField]
-    private Task currentJob;
-    
-    
-    
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -50,11 +44,5 @@ public class BallAi : MonoBehaviour
             }
         }
     }
-
-    //Collec tAll Items Job
-
-    public void EndJob()
-    {
-        haveTask = false;
-    }
+    
 }

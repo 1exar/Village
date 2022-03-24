@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using Jobs;
 
 public class UIManager : MonoBehaviour
 {
@@ -17,11 +18,20 @@ public class UIManager : MonoBehaviour
 
     public List<GameObject> uiToHide;
 
+    [SerializeField] private Transform taskListParent;
+    [SerializeField] private GameObject taskLitsObjectPrefab;
+
     private void Awake()
     {
         I = this;
     }
 
+    public void AddNewTaskToTaskList(Task job)
+    {
+        TaskListObject newTask = Instantiate(taskLitsObjectPrefab, taskListParent).GetComponent<TaskListObject>();
+        newTask.Init(job);
+    }
+    
     public void CloseAllPanels()
     {
         foreach (var panel in panels)

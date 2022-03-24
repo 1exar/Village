@@ -41,9 +41,12 @@ public class DropedItem : MonoBehaviour
     private SpriteRenderer sp;
     public TMP_Text countText;
 
-    public bool occuped = false, moveToBall = false;
+    public bool occuped = false, moveToBall = false, used = false;
     private Vector3 offSet;
     public Transform ballPos;
+
+    public CollectDropTask jobWithMe;
+    
     public void Init(Item item, int count)
     {
         currentItem = item;
@@ -62,6 +65,8 @@ public class DropedItem : MonoBehaviour
     {
         moveToBall = false;
         WorldResourceManager.I.dropedItems.Remove(this);
+        jobWithMe.OnItemMovedToStorage();
+        Destroy(gameObject);
     }
     
 }
