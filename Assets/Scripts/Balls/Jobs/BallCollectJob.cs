@@ -69,7 +69,7 @@ public class BallCollectJob : MonoBehaviour
                 }
                 else
                 {
-                    _myDrop.GetComponent<DropedItem>().MoveToStorage();
+                    _myDrop.GetComponent<DropedItem>().MoveToStorage(BuildingManager.I.mainStorage.GetComponent<Building>().storage);
                     _pickupDrop = false;
                     _myDrop = null;
                 }

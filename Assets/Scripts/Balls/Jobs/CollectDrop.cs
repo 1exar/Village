@@ -10,7 +10,7 @@ namespace Jobs
         public CollectDrop(List<Ball> balls, List<DropedItem> type)
         {
             CollectDropTask job = new CollectDropTask();
-            job.name = "Искать мусор";
+            job.name = "Собирать рессурсы";
 
             if (type.Count == 0)
             {
@@ -38,6 +38,8 @@ namespace Jobs
                         }
                     }
                 }
+
+                job.name = "Собирать " + type[0].Name;
             }
 
             foreach (var ball in balls)

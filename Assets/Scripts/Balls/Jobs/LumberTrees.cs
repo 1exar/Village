@@ -11,7 +11,7 @@ namespace Jobs
         {
             LumberTreesTask job = new LumberTreesTask();
             job.progressMax = tree.Count;
-            job.name = "Лесохуй";
+            job.name = "Рубить дерево";
 
             // GameObject[] trees = GameObject.FindGameObjectsWithTag("Tree").Where(t => !t.GetComponent<Tree>().ocuped).ToArray();
             int c = 0;

@@ -6,35 +6,44 @@ using Items;
 public class Storage : MonoBehaviour
 {
 
-    public Dictionary<Item, int> items = new Dictionary<Item, int>();
+   private Dictionary<string, Resource> itemsInStorage = new Dictionary<string, Resource>();
 
-    public void AddItemToStorage(Item item, int count)
-    {
-        if (items.ContainsKey(item))
-        {
-            items[item] += count;
-        }
-    }
+   private void Start()
+   {
+      Init();
+   }
 
-    public int GetCount(Item type)
-    {
-        return items[type];
-    }
-    
-    public void GetAllItems()
-    {
-        
-        print("Get All items");
-        
-        foreach (var item in items)
-        {
-            Debug.Log(item.Key + " " + item.Value);
-        }
-    }
+   private void Init()
+   {
+      foreach (var item in GameManager.I.items.getAllItemsType())
+      {
+         Resource newItem = new Resource();
+         newItem.type = item;
+         itemsInStorage.Add(item.Name, newItem);
+      }
+   }
 
-}
-[Serializable]
-public class StoredItem : Item
-{
-    public int count;
+   public List<Resource> GetAllItemsInStorage()
+   {
+      List<Resource> result = new List<Resource>();
+      foreach (var item in itemsInStorage)
+      {
+         result.Add(item.Value);
+      }
+
+      return result;
+   }
+   
+   public void AddItemToStorage(Item type, int count)
+   {
+      if (itemsInStorage.ContainsKey(type.Name))
+      {
+         itemsInStorage[type.Name].AddResource(count);
+      }
+      else
+      {
+         Debug.LogError("Item no exist in ItemDataBase");
+      }
+   }
+   
 }

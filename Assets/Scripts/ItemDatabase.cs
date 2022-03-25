@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Items;
 using UnityEngine;
 
@@ -7,6 +8,21 @@ public class ItemDatabase : ScriptableObject
 {
     [SerializeField] public WoodItem wood;
     [SerializeField] public BrushWoodItem BrushWood;
+
+    private List<Item> allItems = new List<Item>();
+
+    public List<Item> getAllItemsType()
+    {
+        if (allItems.Count != 0) return allItems;
+        else
+        {
+            allItems.Add(wood);
+            allItems.Add(BrushWood);
+
+            return allItems;
+        }
+    }
+
     [Serializable]
     public class WoodItem : Item
     {
@@ -17,6 +33,8 @@ public class ItemDatabase : ScriptableObject
     {
         
     }
+    
+    
     
 }
 

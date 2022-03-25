@@ -61,11 +61,13 @@ public class DropedItem : MonoBehaviour
             transform.position = ballPos.position - offSet;
     }
 
-    public void MoveToStorage()
+    public void MoveToStorage(Storage storage)
     {
         moveToBall = false;
         WorldResourceManager.I.dropedItems.Remove(this);
         jobWithMe.OnItemMovedToStorage();
+        storage.AddItemToStorage(currentItem, count);
+        ResourceManager.I.CheckMyResources();
         Destroy(gameObject);
     }
     

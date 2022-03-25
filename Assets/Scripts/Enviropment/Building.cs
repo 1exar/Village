@@ -26,7 +26,7 @@ public class Building : MonoBehaviour, IBuilding
 
     public void OnMouseDown()
     {
-        storage.GetAllItems();
+      //  storage.GetAllItems();
     }
 
     public void Upgrade()
