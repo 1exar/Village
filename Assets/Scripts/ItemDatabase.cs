@@ -8,9 +8,15 @@ public class ItemDatabase : ScriptableObject
 {
     [SerializeField] public WoodItem wood;
     [SerializeField] public BrushWoodItem BrushWood;
+    [SerializeField] public Stone stone;
 
     private List<Item> allItems = new List<Item>();
 
+    public void ClearAllItemsList()
+    {
+        allItems.Clear();
+    }
+    
     public List<Item> getAllItemsType()
     {
         if (allItems.Count != 0) return allItems;
@@ -18,6 +24,7 @@ public class ItemDatabase : ScriptableObject
         {
             allItems.Add(wood);
             allItems.Add(BrushWood);
+            //allItems.Add(stone);
 
             return allItems;
         }
@@ -33,8 +40,12 @@ public class ItemDatabase : ScriptableObject
     {
         
     }
-    
-    
+
+    [Serializable]
+    public class Stone : Item
+    {
+        
+    }
     
 }
 
@@ -45,10 +56,10 @@ namespace Items
     {
         [SerializeField] private string name;
         public string Name
-        { get { return name;} protected set {}}
+        { get { return name;} set {}}
 
         [SerializeField] private Sprite sprite;
         public Sprite Sprite
-        { get { return sprite; } protected set{} }
+        { get { return sprite; } set{} }
     }
 }

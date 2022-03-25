@@ -32,6 +32,7 @@ public class ResourceManager : MonoBehaviour
             ResourceHeader newTabView = Instantiate(resourceHeaderPrefab, spawnParent).GetComponent<ResourceHeader>();
             newTabView.Init(item.Sprite, 0);
             tabResource.Add(newTabView);
+            print(item.Name);
         }
     }
 

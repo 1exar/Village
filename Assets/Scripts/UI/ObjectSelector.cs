@@ -68,15 +68,12 @@ public class ObjectSelector : MonoBehaviour
     private bool IsWithinPolygon(Vector3 unitPos)
     {
         bool isWithinPolygon = false;
-
-        //The polygon forms 2 triangles, so we need to check if a point is within any of the triangles
-        //Triangle 1: TL - BL - TR
+        
         if (IsWithinTriangle(unitPos, TL, BL, TR))
         {
             return true;
         }
 
-        //Triangle 2: TR - BL - BR
         if (IsWithinTriangle(unitPos, TR, BL, BR))
         {
             return true;
@@ -89,14 +86,12 @@ public class ObjectSelector : MonoBehaviour
     {
         bool isWithinTriangle = false;
 
-        //Need to set z -> y because of other coordinate system
         float denominator = ((p2.z - p3.z) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.z - p3.z));
 
         float a = ((p2.z - p3.z) * (p.x - p3.x) + (p3.x - p2.x) * (p.z - p3.z)) / denominator;
         float b = ((p3.z - p1.z) * (p.x - p3.x) + (p1.x - p3.x) * (p.z - p3.z)) / denominator;
         float c = 1 - a - b;
 
-        //The point is within the triangle if 0 <= a <= 1 and 0 <= b <= 1 and 0 <= c <= 1
         if (a >= 0f && a <= 1f && b >= 0f && b <= 1f && c >= 0f && c <= 1f)
         {
             isWithinTriangle = true;
