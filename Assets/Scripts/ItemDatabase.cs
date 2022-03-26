@@ -60,6 +60,7 @@ public class ItemDatabase : ScriptableObject
         {
             current = items[--currentIndex];
             items.RemoveAt(++currentIndex);
+            currentIndex--;
         }
         else
         {

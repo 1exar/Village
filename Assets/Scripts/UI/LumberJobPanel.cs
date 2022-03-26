@@ -40,6 +40,7 @@ public class LumberJobPanel : MonoBehaviour
         LumberTrees lumber = new LumberTrees(trees, GameManager.I.avaibleBalls((int)avaibleBalls.value));
        // JobsManager.I.LumberTrees((int)count.value,(int)avaibleBalls.value);
        UIManager.I.CloseAllPanels();
+       UIManager.I.applyButton.SetActive(true);
     }
 
     public void SelectRegion()

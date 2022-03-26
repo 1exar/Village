@@ -10,14 +10,14 @@ public class UIManager : MonoBehaviour
 {
 
     public List<GameObject> panels;
-    public GameObject lumberJobPane, applyButton;
+    public GameObject lumberJobPane, applyButton, applyBuilding;
     
     public static UIManager I;
 
     public List<GameObject> uiToHide;
 
     [SerializeField] private Transform taskListParent;
-    [SerializeField] private GameObject taskLitsObjectPrefab;
+    [SerializeField] private GameObject taskLitsObjectPrefab, headerPanel, downPanel;
 
     private void Awake()
     {
@@ -49,7 +49,6 @@ public class UIManager : MonoBehaviour
         {
             ui.SetActive(false);
         }
-        applyButton.SetActive(true);
     }
 
     public void ShowUI()
