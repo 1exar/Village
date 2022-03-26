@@ -48,7 +48,7 @@ namespace Jobs
 
                 foreach (var item in WorldResourceManager.I.dropedItems)
                 {
-                    if (item.Name == GameManager.I.items.wood.Name || item.Name == GameManager.I.items.BrushWood.Name)
+                    if (item.Name == "wood" || item.Name == "brushWood")
                     {
                         itemsToCollect.Add(item);
                     }

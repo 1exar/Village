@@ -28,9 +28,8 @@ public class Tree : MonoBehaviour, IMined
     {
         hpSlider.maxValue = hp;
         hpSlider.value = hp;
-        _itemsToDrop.Add(new ItemsToDrop(GameManager.I.items.wood, woodDrop, 100));
-        _itemsToDrop.Add(new ItemsToDrop(GameManager.I.items.BrushWood, 100, 100));
-        _itemsToDrop.Add(new ItemsToDrop(GameManager.I.items.stone, 10, 100));
+        _itemsToDrop.Add(new ItemsToDrop(GameManager.I.items["wood"], woodDrop, 100));
+        _itemsToDrop.Add(new ItemsToDrop(GameManager.I.items["brushWood"], 100, 100));
     }
 
     public void OnMouseDown()

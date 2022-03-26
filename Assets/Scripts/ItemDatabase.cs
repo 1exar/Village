@@ -6,47 +6,96 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Items/Database", fileName = "ItemsDatabase")]
 public class ItemDatabase : ScriptableObject
 {
-    [SerializeField] public WoodItem wood;
-    [SerializeField] public BrushWoodItem BrushWood;
-    [SerializeField] public Stone stone;
 
-    private List<Item> allItems = new List<Item>();
+    [SerializeField]private List<Item> items;
 
-    public void ClearAllItemsList()
+    [SerializeField]private Item current;
+
+    [SerializeField]private int currentIndex;
+
+    public Item this[int index]
     {
-        allItems.Clear();
-    }
-    
-    public List<Item> getAllItemsType()
-    {
-        if (allItems.Count != 0) return allItems;
-        else
+        get
         {
-            allItems.Add(wood);
-            allItems.Add(BrushWood);
-            //allItems.Add(stone);
+            if (items != null && index >= 0 && index < items.Count)
+                return items[index];
+            return null;
+        }
+        set
+        {
+            if (items == null)
+                items = new List<Item>();
 
-            return allItems;
+            if (index >= 0 && index < items.Count && value != null)
+                items[index] = value;
+            else Debug.LogError("out of range or value is null");
         }
     }
 
-    [Serializable]
-    public class WoodItem : Item
+    public Item this[string id]
     {
-        
-    }
-    [Serializable]
-    public class BrushWoodItem : Item
-    {
-        
-    }
+        get
+        {
+            foreach (var item in items)
+            {
+                if (item.Id == id) return item;
+            }
 
-    [Serializable]
-    public class Stone : Item
-    {
-        
+            return null;
+        }
     }
     
+    public void AddElement()
+    {
+        if (items == null)
+            items = new List<Item>();
+        current = new Item();
+        items.Add(current);
+        currentIndex = items.Count - 1;
+    }
+
+    public void RemoveCurrentElement()
+    {
+        if (currentIndex > 0)
+        {
+            current = items[--currentIndex];
+            items.RemoveAt(++currentIndex);
+        }
+        else
+        {
+            items.Clear();
+            current = null;
+        }
+    }
+    
+    public Item NextItem()
+    {
+        if (currentIndex < items.Count - 1)
+            currentIndex++;
+        current = this[currentIndex];
+        return current;
+    }
+
+    public Item PrevItem()
+    {
+        if (currentIndex > 0)
+            currentIndex--;
+        current = this[currentIndex];
+        return current;
+    }
+
+    public List<Item> allItems
+    {
+        protected set
+        {
+            
+        }
+        get
+        {
+            return items;
+        }
+    }
+
 }
 
 namespace Items
@@ -61,5 +110,10 @@ namespace Items
         [SerializeField] private Sprite sprite;
         public Sprite Sprite
         { get { return sprite; } set{} }
+
+        [SerializeField] private string id;
+        public string Id
+        { get { return id;} set{}}
     }
+
 }

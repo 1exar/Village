@@ -24,7 +24,7 @@ public class ResourceManager : MonoBehaviour
 
     private void Init()
     {
-        foreach (var item in GameManager.I.items.getAllItemsType())
+        foreach (var item in GameManager.I.items.allItems)
         {
             Resource newItem = new Resource();
             newItem.type = item;
@@ -67,6 +67,7 @@ public class ResourceManager : MonoBehaviour
 
 namespace Items
 {
+    [Serializable]
     public class Resource
     {
 

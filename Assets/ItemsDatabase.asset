@@ -12,12 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55eb8231655f4332aeb7eca143a72b40, type: 3}
   m_Name: ItemsDatabase
   m_EditorClassIdentifier: 
-  wood:
-    name: "\u0414\u0435\u0440\u0435\u0432\u043E"
+  items:
+  - name: "\u0414\u0435\u0440\u0435\u0432\u043E"
     sprite: {fileID: 21300000, guid: 7b91ae6536dab41829f68583112eaf1d, type: 3}
-  BrushWood:
-    name: "\u0425\u0432\u043E\u0440\u043E\u0441\u0442"
+    id: wood
+  - name: "\u0412\u0435\u0442\u043A\u0438"
     sprite: {fileID: 21300000, guid: 38bc5ccc10d684f1f884b475b284be57, type: 3}
-  stone:
-    name: "\u041A\u0430\u043C\u0435\u043D\u044C"
-    sprite: {fileID: 21300000, guid: bb531f9e0cbc8413283d5ca12b66a608, type: 3}
+    id: brushWood
+  current:
+    name: "\u0412\u0435\u0442\u043A\u0438"
+    sprite: {fileID: 21300000, guid: 38bc5ccc10d684f1f884b475b284be57, type: 3}
+    id: 
+  currentIndex: 1

@@ -1,4 +1,5 @@
 using System;
+using Items;
 using UnityEditor;
 using UnityEngine;
 
@@ -15,11 +16,28 @@ public class ItemDatabaseGUI : Editor
 
     public override void OnInspectorGUI()
     {
-        if(GUILayout.Button("Обновить список элементов", GUILayout.Height(30))) db.ClearAllItemsList();
-        foreach (var item in db.getAllItemsType())
+
+        GUILayout.BeginHorizontal();
+
+        if (GUILayout.Button("Remove"))
         {
-            item.Name = EditorGUILayout.TextField("Название предмета", item.Name);
-            item.Sprite = (Sprite)EditorGUILayout.ObjectField("Иконка", item.Sprite, typeof(Sprite), false);
+            db.RemoveCurrentElement();
+        }    
+        if (GUILayout.Button("Add"))
+        {
+            db.AddElement();
+        }   
+        if (GUILayout.Button("Next"))
+        {
+            db.NextItem();
         }
+        if (GUILayout.Button("Prev"))
+        {
+            db.PrevItem();
+        }
+        
+        GUILayout.EndHorizontal();
+        base.OnInspectorGUI();
+
     }
 }

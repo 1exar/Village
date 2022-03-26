@@ -10,9 +10,7 @@ public class UIManager : MonoBehaviour
 {
 
     public List<GameObject> panels;
-    public GameObject lumberJobPane, collectChoiseItemsPanel, applyButton;
-
-    public HeaderPanel header;
+    public GameObject lumberJobPane, applyButton;
     
     public static UIManager I;
 
@@ -61,11 +59,6 @@ public class UIManager : MonoBehaviour
             ui.SetActive(true);
         }
         applyButton.SetActive(false);
-    }
-    
-    public void OnCollectJobChoise()
-    {
-        collectChoiseItemsPanel.SetActive(true);
     }
 
 }
