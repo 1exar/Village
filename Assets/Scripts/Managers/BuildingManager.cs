@@ -4,28 +4,27 @@ using System.Collections.Generic;
 using Items;
 using UnityEngine;
 using Buildings;
+using UnityEngine.AI;
 
 public class BuildingManager : MonoBehaviour
 {
 
     public static BuildingManager I;
-
     public Storage mainStorage;
-    
     [SerializeField]
     public List<Building> buildings = new List<Building>();
-
     [SerializeField]
-    public List<BuildingCardInfo> buildingsList = new List<BuildingCardInfo>();
-
-    private List<BuildingCard> buildingUIPanels = new List<BuildingCard>();
+    private List<BuildingCardInfo> buildingsList = new List<BuildingCardInfo>();
+    [SerializeField] 
+    private List<BuildingCardInfo> enviropmentList = new List<BuildingCardInfo>();
     [SerializeField]
     private GameObject buildingCardPrefab;
     [SerializeField] 
-    private Transform parent, mapParent;
+    private Transform parent, mapParent, envParent;
     [SerializeField]
     private GameObject currentBuilding;
-    
+
+    public GameObject fenceBuilder;
     
     private void Awake()
     {
@@ -45,6 +44,17 @@ public class BuildingManager : MonoBehaviour
             card.icon.sprite = building.icon;
             card.resourcesToBuild = building.resourcesToBuild;
             card.prefab = building.buildingPrefab;
+            card.currentType = building.type;
+            card.Init();
+        }
+
+        foreach (var enviropment in enviropmentList)
+        {
+            BuildingCard card = Instantiate(buildingCardPrefab, envParent).GetComponent<BuildingCard>();
+            card.icon.sprite = enviropment.icon;
+            card.resourcesToBuild = enviropment.resourcesToBuild;
+            card.prefab = enviropment.buildingPrefab;
+            card.currentType = enviropment.type;
             card.Init();
         }
     }
@@ -54,16 +64,20 @@ public class BuildingManager : MonoBehaviour
         currentBuilding = Instantiate(building, mapParent);
         currentBuilding.AddComponent<BuildingVisualizer>();
         UIManager.I.applyBuilding.SetActive(true);
+        UIManager.I.cancelBuildingButton.SetActive(true);
     }
 
-    public void ApplyBuilding()
+    public void SetupBuilding()
     {
-        
+        Destroy(currentBuilding.GetComponent<BuildingVisualizer>());
+        currentBuilding.GetComponent<BuildingDevelopment>().StartDevelopment();
+        UIManager.I.ShowUI();
     }
 
     public void RemoveVisualizing()
     {
-        
+        Destroy(currentBuilding);
+        UIManager.I.ShowUI();
     }
     
 }
@@ -79,6 +93,8 @@ namespace Buildings
         public Sprite icon;
 
         public GameObject buildingPrefab;
+
+        public BuildingCard.buildingType type;
     }
 
     [Serializable]

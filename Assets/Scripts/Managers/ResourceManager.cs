@@ -28,11 +28,10 @@ public class ResourceManager : MonoBehaviour
         {
             Resource newItem = new Resource();
             newItem.type = item;
-            myResource.Add(item.Name, newItem);
+            myResource.Add(item.Id, newItem);
             ResourceHeader newTabView = Instantiate(resourceHeaderPrefab, spawnParent).GetComponent<ResourceHeader>();
             newTabView.Init(item.Sprite, 0);
             tabResource.Add(newTabView);
-            print(item.Name);
         }
     }
 
@@ -51,7 +50,7 @@ public class ResourceManager : MonoBehaviour
         {
             foreach (var resource in building.storage.GetAllItemsInStorage())
             {
-                myResource[resource.type.Name].AddResource(resource.GetCount());
+                myResource[resource.type.Id].AddResource(resource.GetCount());
             }
         }
 
@@ -61,6 +60,11 @@ public class ResourceManager : MonoBehaviour
             tabResource[id].UpdateView(resource.Value.GetCount());
             id++;
         }
+    }
+
+    public int GetResourceCount(string id)
+    {
+        return myResource[id].GetCount();
     }
     
 }

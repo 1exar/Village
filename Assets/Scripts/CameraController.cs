@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CameraController : MonoBehaviour, IDragHandler
+public class CameraController : MonoBehaviour, IDragHandler, IEndDragHandler
 {
     [SerializeField] Transform cameraTransform;
     [SerializeField] Vector3 cameraOffsetPosition;
@@ -52,7 +52,12 @@ public class CameraController : MonoBehaviour, IDragHandler
         cameraTransform.position = Vector3.Lerp(transform.position, new Vector3(xPos, zPos, cameraTransform.position.z), 1);
         
         Draged = true;
-        
-      //  print(Draged);
+        //  print(Draged);
+    }
+    
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        Draged = false;
     }
 }

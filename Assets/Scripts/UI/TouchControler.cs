@@ -20,6 +20,13 @@ public class TouchControler : MonoBehaviour, IPointerClickHandler, IPointerUpHan
                     print("hit point");
                 }
             }
+            if (hit.collider.gameObject.GetComponent<Building>())
+            {
+                if (!CameraController.I.Draged)
+                {
+                    print("hit building");
+                }
+            }
         }
     }
     public void OnPointerUp(PointerEventData eventData)

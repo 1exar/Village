@@ -26,9 +26,15 @@ public class Building : MonoBehaviour, IBuilding
 
     public void OnMouseDown()
     {
-      //  storage.GetAllItems();
+      print("hit on building");
     }
 
+    public Storage GetStorage()
+    {
+        if (haveStorage) return storage;
+        else return null;
+    }
+    
     public void Upgrade()
     {
         throw new NotImplementedException();
