@@ -26,7 +26,10 @@ public class Building : MonoBehaviour, IBuilding
 
     public void OnMouseDown()
     {
-      print("hit on building");
+        if (haveStorage && storage)
+        {
+            BuildingStorageInfoPanel.I.Init(storage.GetAllItemsInStorage(), "pososi");
+        }
     }
 
     public Storage GetStorage()

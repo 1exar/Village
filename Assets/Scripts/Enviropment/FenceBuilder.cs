@@ -49,63 +49,88 @@ public class FenceBuilder : MonoBehaviour
         }
     }
 
+    enum dir
+    {
+        up, down, right, left, upleft, upright, rightdown, leftDown
+    }
     private void SpawnObjects(Vector3 a, Vector3 b)
     {
         Vector3 direction = (b - a).normalized;
         int howMany = (int) (Vector3.Distance(a, b) / spacing);
 
         float newSpacing = 16;
-        
-        print(direction);
+
+        int order = 2;
+
+        dir current = default;
 
         GameObject[] spawned = new GameObject[howMany + 1];
-        int order = 5;
 
+        if (direction.x > 0)// right
+        {
+            if (direction.y > 0.4f)//rightUp
+            {
+                order = spawned.Length + 5;
+            }
+            else if (direction.y < -0.4f)//rightDown
+            {
+            }
+        }
+        else//left
+        {
+            if (direction.y > 0.4f)//leftUp
+            {
+                order = spawned.Length + 5;
+            }
+            else if (direction.y < -0.4f)//leftDown
+            {
+            }
+        }
         
-        if (direction.y < -.35f)
-        {
-            order = 5;
-        }
-        else
-        {
-            order = spawned.Length + 5;
-            spawned = spawned.Reverse().ToArray();
-        }
-
-        if (direction.x > -0.35f)
-        {
-            print("right");
-        }
-
         for (int i = 0; i < howMany + 1; i++)
         {
             spawned[i] = Instantiate(spawnPrefab);
-            if (direction.y < -.35f)
-            {
-                order++;
-            }
-            else if(direction.x > -0.35f)
-            {
-                spawned[i].name = "right";
-                order--;
-            }
-            else
-            {
-                order--;
-            }
+            
             if(i == 0)
             {
                 newSpacing = 0;
-                spawned[i].GetComponent<SpriteRenderer>().sortingOrder = 5;
             }else{
                 newSpacing += spacing;
-                spawned[i].GetComponent<SpriteRenderer>().sortingOrder = order;
             }
 
+            if (direction.x > 0)// right
+            {
+                order++;
+                spawned[i].name = "right";
+                if (direction.y > 0.4f)//rightUp
+                {
+                    spawned[i].name = "rightUp";
+                    order--;
+                }
+                else if (direction.y < -0.4f)//rightDown
+                {
+                    spawned[i].name = "rightDown";
+                }
+            }
+            else//left
+            {
+                order++;
+                spawned[i].name = "left";
+                if (direction.y > 0.4f)//leftUp
+                {
+                    spawned[i].name = "leftUp";
+                    order--;
+                }
+                else if (direction.y < -0.4f)//leftDown
+                {
+                    spawned[i].name = "leftDown";
+                    order++;
+                }
+            }
+            
+            spawned[i].GetComponent<SpriteRenderer>().sortingOrder = order;
             spawned[i].transform.position = a + (direction * newSpacing) + Vector3.up * Random.Range(0,.5f); 
             spikes.Add(spawned[i]);
-            //spawned[i].name = i + "";
-            
         }
     }
 
